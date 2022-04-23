@@ -1,3 +1,4 @@
+#!/bin/sh
 sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
 mkdir -p /root/.ssh
-curl https://github.com/mlyxshi.keys  > /root/.ssh/authorized_keys
+wget -O- https://github.com/mlyxshi.keys  > /root/.ssh/authorized_keys
