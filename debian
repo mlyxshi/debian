@@ -29,7 +29,7 @@ Name=${DEVICENAME}
 DHCP=yes
 EOF
 
-systemctl enable systemd-networkd
+systemctl enable systemd-networkd --now
 
 # systemd-resolved
 echo "DNS=1.1.1.1" >> /etc/systemd/resolved.conf
