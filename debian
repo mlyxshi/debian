@@ -19,8 +19,6 @@ apt -y clean
 
 # systemd-networkd
 # systemctl --type=service
-# remove debian's buildin network manager
-apt -y remove ifupdown
 DEVICENAME="$(ip -o -4 route show to default | awk '{print $5}')"
 
 cat> /etc/systemd/network/dhcp.network<<EOF
@@ -38,4 +36,7 @@ echo "DNS=1.1.1.1" >> /etc/systemd/resolved.conf
 echo "DNS=2606:4700:4700::1111" >> /etc/systemd/resolved.conf
 systemctl enable systemd-resolved
 
+
 echo "Please reboot"
+# remove debian's buildin network manager
+apt -y remove ifupdown
