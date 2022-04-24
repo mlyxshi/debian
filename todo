@@ -1,5 +1,6 @@
 #remove grub
 
+//https://p5r.uk/blog/2020/using-systemd-boot-on-debian-bullseye.html
 
 Using systemd-boot on Debian Bullseye
 This post describes how to replace Grub with the systemd-boot UEFI boot manager. The setup is very similar to the method described in the article Replace GRUB2 on Ubuntu 10.04 with a few simplifications (no secure boot) and with a slightly improved kernel installer hook script.
@@ -41,3 +42,7 @@ Now you should see all installed kernel images in the systemd-boot menu.
 
 It is not necessary to remove grub, as long as it appears after systemd-boot in the output of efibootmgr. This also provides a useful fallback in case systemd-boot is having a problem.
 
+
+
+apt remove grub*
+apt autoremove
