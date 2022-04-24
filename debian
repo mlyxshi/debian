@@ -37,3 +37,5 @@ systemctl enable systemd-networkd
 echo "DNS=1.1.1.1" >> /etc/systemd/resolved.conf
 echo "DNS=2606:4700:4700::1111" >> /etc/systemd/resolved.conf
 systemctl enable systemd-resolved
+
+echo "Please reboot"
