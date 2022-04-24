@@ -1,0 +1,43 @@
+#remove grub
+
+
+Using systemd-boot on Debian Bullseye
+This post describes how to replace Grub with the systemd-boot UEFI boot manager. The setup is very similar to the method described in the article Replace GRUB2 on Ubuntu 10.04 with a few simplifications (no secure boot) and with a slightly improved kernel installer hook script.
+
+Start by creating a boot config file /boot/efi/loader/loader.conf with the following content.
+
+default debian
+timeout 1
+editor 1
+Create the directory that will hold the configuration files for the installed kernel images
+
+mkdir -p /boot/efi/loader/entries
+and install the boot loader with the bootctl command
+
+bootctl install --path=/boot/efi
+You can then check if the installation was successful with the efibootmgr. This command is also useful to change the boot order and to delete old boot entries.
+
+Now systemd-boot is installed, but it does not know about the installed kernel images in the system.
+
+Use the kernel-install command to add and remove the kernel to and from the systemd-boot directory structure. Simply create a /etc/kernel/postinst.d/zz-update-systemd-boot file with the following content:
+
+#!/bin/sh
+set -e
+
+/usr/bin/kernel-install add "$1" "$2"
+
+exit 0
+Create a /etc/kernel/postrm.d/zz-update-systemd-boot file with the following content:
+
+#!/bin/sh
+set -e
+
+/usr/bin/kernel-install remove "$1"
+
+exit 0
+Create the /boot/efi/<machine-id> directory if it doesn't exist (find the machine-id from the file /etc/machine-id) and run kernel-install manually to force the initial install.
+
+Now you should see all installed kernel images in the systemd-boot menu.
+
+It is not necessary to remove grub, as long as it appears after systemd-boot in the output of efibootmgr. This also provides a useful fallback in case systemd-boot is having a problem.
+
