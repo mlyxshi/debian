@@ -19,7 +19,6 @@ apt -y autoremove
 apt -y clean
 
 # systemd-networkd
-# systemctl --type=service
 DEVICENAME="$(ip -o -4 route show to default | awk '{print $5}')"
 
 cat> /etc/systemd/network/dhcp.network<<EOF
@@ -39,5 +38,6 @@ systemctl enable systemd-resolved --now
 
 
 echo "apt -y remove ifupdown may get stuck, Please force reboot from portal"
+# systemctl --type=service
 # remove debian's buildin network manager
 apt -y remove ifupdown
