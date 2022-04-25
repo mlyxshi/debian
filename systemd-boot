@@ -43,6 +43,7 @@ PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|
 # and add entry in ESP:/loader/entries
 apt -y reinstall ${PACKAGE}
 
-
 apt -y remove grub*
 apt -y autoremove
+apt install efibootmgr
+efibootmgr
