@@ -29,7 +29,7 @@ mkdir ${ESPPATH}/${MACHINEID}
 
 
 # very ugly way to get latest installed kernel package name 
-PACKAGE=$(dpkg -l|grep linux-image|awk '{print $2}'|sed 's/linux-image-amd64//'|sed 's/linux-image-arm64//'|sort -r|head -1)
+PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|sed 's/linux-image-arm64//'|sort -r|head -1)
 
 # trigger postinst.d script to run kernel-install
 # kernel-install move /boot/vmlinuz /boot/initrd to ESP:/MACHINEID.
