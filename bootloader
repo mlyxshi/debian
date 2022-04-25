@@ -34,7 +34,6 @@ else
   exit 1
 fi
 
-# We only need 2 kernel: the latest one and the previous one
 NUMBER_OF_KERNEL=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|wc -l)
 
 echo "\033[0;32mNumber of Kernel: ${NUMBER_OF_KERNEL}\033[0m"
