@@ -39,7 +39,7 @@ systemctl enable systemd-resolved
 
 # systemctl --type=service
 # remove debian's buildin network manager
-apt -y remove ifupdown
+apt purge -y --auto-remove ifupdown isc-dhcp-client
 
 #Under chroot environment, OS can not reboot, which is what we want[configure other thing like systemd-boot]
 #Under normal environment, OS need reboot
