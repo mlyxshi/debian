@@ -1,5 +1,7 @@
 #!/bin/sh
 
+apt update
+apt -y upgrade 
 
 # cat need escape $
 cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<EOF
@@ -22,26 +24,26 @@ EOF
 
 chmod 755 /etc/kernel/postrm.d/zz-update-systemd-boot
 
-MACHINEID=$(cat /etc/machine-id)
-ESPPATH=$(bootctl -p)
+MACHINE_ID=$(cat /etc/machine-id)
+ESP_PATH=$(bootctl -p)
 
 bootctl install 
-mkdir ${ESPPATH}/${MACHINEID}
+mkdir ${ESP_PATH}/${MACHINE_ID}
 
 
-cat > ${ESPPATH}/loader/loader.conf<<EOF
+cat > ${ESP_PATH}/loader/loader.conf<<EOF
 default Debian
 timeout 2
 EOF
 
 
 # very ugly way to get latest installed kernel package name 
-PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|sed 's/linux-image-arm64//'|sort -r|head -1)
+KERNEL_PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|sed 's/linux-image-arm64//'|sort -r|head -1)
 
 # manually trigger postinst.d script to run kernel-install
 # kernel-install move /boot/vmlinuz /boot/initrd to ESP:/MACHINEID.
 # and add entry in ESP:/loader/entries
-apt -y reinstall ${PACKAGE}
+apt -y reinstall ${KERNEL_PACKAGE}
 
 apt -y remove grub*
 apt install efibootmgr
