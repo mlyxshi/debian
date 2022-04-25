@@ -29,6 +29,11 @@ bootctl install
 mkdir ${ESPPATH}/${MACHINEID}
 
 
+cat > ${ESPPATH}/loader/loader.conf<<EOF
+default Debian
+timeout 2
+EOF
+
 
 # very ugly way to get latest installed kernel package name 
 PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|sed 's/linux-image-arm64//'|sort -r|head -1)
