@@ -44,6 +44,9 @@ PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|
 apt -y reinstall ${PACKAGE}
 
 apt -y remove grub*
-apt -y autoremove
 apt install efibootmgr
+apt -y autoremove
 efibootmgr
+
+echo "Please Manually Configure Boot Order"
+echo "efibootmgr -b <X> -B"
