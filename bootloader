@@ -90,7 +90,7 @@ KERNEL_PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd
 # and add entry in ESP:/loader/entries
 apt -y reinstall ${KERNEL_PACKAGE}
 
-apt -y remove grub*
+apt -y purge grub*
 apt install efibootmgr
 apt -y autoremove
 efibootmgr
