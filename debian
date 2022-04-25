@@ -41,3 +41,7 @@ echo "apt -y remove ifupdown may get stuck, Please force reboot from portal"
 # systemctl --type=service
 # remove debian's buildin network manager
 apt -y remove ifupdown
+
+#Under chroot environment, OS can not reboot, which is what we want[configure other thing like systemd-boot]
+#Under normal environment, OS need reboot
+reboot
