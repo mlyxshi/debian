@@ -9,36 +9,35 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 ##########################################################################################################################
-# cat need escape $
-cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<EOF
+cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<'EOF'
 #!/bin/sh
 
-/usr/bin/kernel-install add "\$1" "\$2"
+/usr/bin/kernel-install add "$1" "$2"
 
-if [ \$? -eq 0 ]
+if [ $? -eq 0 ]
 then
-  echo "${Green}Systemd-boot Add Entry Success${NC}"
+  echo "\033[0;32mSystemd-boot Add Entry Success\033[0m"
   exit 0
 else
-  echo "${RED}Systemd-boot Add Entry Failed${NC}"
+  echo "\033[0;31mSystemd-boot Add Entry Failed\033[0m"
   exit 1
 fi
 
 # We only need 2 kernel: the latest one and the old one
-NUMBER_OF_EXTRA_KERNEL=\$(dpkg -l|awk '{print \$2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|wc -l)
+NUMBER_OF_EXTRA_KERNEL=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|wc -l)
 
-if [ \${NUMBER_OF_EXTRA_KERNEL} -gt 0 ] 
+if [ ${NUMBER_OF_EXTRA_KERNEL} -gt 0 ] 
 then
-    echo "${Green}More than two kernel found${NC}"
+    echo "\033[0;32mMore than two kernel found\033[0m"
     
-    for i in \$(dpkg -l|awk '{print \$2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d')
+    for i in $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d')
     do
-        apt purge -y \${i}
-        if [ \$? -eq 0 ]
+        apt purge -y ${i}
+        if [ $? -eq 0 ]
         then
-            echo "${Green}Delete Kernel \${i} Success${NC}"
+            echo "\033[0;32mApt Purge Kernel ${i} Success\033[0m"
         else
-            echo "${RED}Delete Kernel \${i} Failed${NC}"
+            echo "\033[0;31mApt Purge Kernel ${i} Failed\033[0m"
         fi
     done
 fi
@@ -47,17 +46,17 @@ EOF
 ##########################################################################################################################
 chmod 755 /etc/kernel/postinst.d/zz-update-systemd-boot
 ##########################################################################################################################
-cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<EOF
+cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<'EOF'
 #!/bin/sh
 
-/usr/bin/kernel-install remove "\$1"
+/usr/bin/kernel-install remove "$1"
 
-if [ \$? -eq 0 ]
+if [ $? -eq 0 ]
 then
-  echo "${Green}Systemd-boot Remove Entry Success${NC}"
+  echo "\033[0;32mSystemd-boot Remove Entry Success\033[0m"
   exit 0
 else
-  echo "${RED}Systemd-boot Remove Entry Failed${NC}"
+  echo "\033[0;31mSystemd-boot Remove Entry Failed\033[0m"
   exit 1
 fi
 EOF
@@ -89,5 +88,5 @@ apt install efibootmgr
 apt -y autoremove
 efibootmgr
 ##########################################################################################################################
-echo "${Yellow}Please Manually Configure Boot Order${NC}"
-echo "${Yellow}efibootmgr -b <X> -B${NC}"
+echo "\033[0;33mPlease Manually Configure Boot Order\033[0m"
+echo "\033[0;33mefibootmgr -b <X> -B\033[0m"
