@@ -19,7 +19,7 @@ apt -y autoremove
 apt -y clean
 
 # systemd-networkd
-DEVICENAME="$(ip -o -4 route show to default | awk '{print $5}')"
+DEVICENAME="$(ip -o -4 route show to default | awk '{print $5}'|head -1)"
 
 cat> /etc/systemd/network/dhcp.network<<EOF
 [Match]
