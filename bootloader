@@ -28,7 +28,7 @@ NUMBER_OF_EXTRA_KERNEL=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-i
 
 if [ ${NUMBER_OF_EXTRA_KERNEL} -gt 0 ] 
 then
-    echo "\033[0;32mMore than two kernel found\033[0m"
+    echo "\033[0;33mMore than two kernel found\033[0m"
     
     for i in $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d')
     do
