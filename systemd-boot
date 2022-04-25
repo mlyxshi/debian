@@ -1,0 +1,39 @@
+cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<EOF
+#!/bin/sh
+
+/usr/bin/kernel-install add "$1" "$2"
+echo "Systemd-boot Add Entry Success"
+exit 0
+EOF
+
+chmod 755 /etc/kernel/postinst.d/zz-update-systemd-boot
+
+cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<EOF
+#!/bin/sh
+
+/usr/bin/kernel-install remove "$1"
+echo "Systemd-boot Remove Entry Success"
+exit 0
+EOF
+
+chmod 755 /etc/kernel/postrm.d/zz-update-systemd-boot
+
+MACHINEID=$(cat /etc/machine-id)
+ESPPATH=$(bootctl -p)
+
+bootctl install 
+mkdir ${ESPPATH}/${MACHINEID}
+
+
+
+# very ugly way to get latest installed kernel package name 
+PACKAGE=$(dpkg -l|grep linux-image|awk '{print $2}'|sed 's/linux-image-amd64//'|sed 's/linux-image-arm64//'|sort -r|head -1)
+
+# trigger postinst.d script to run kernel-install
+# kernel-install move /boot/vmlinuz /boot/initrd to ESP:/MACHINEID.
+# and add entry in ESP:/loader/entries
+apt -y reinstall ${PACKAGE}
+
+
+apt remove grub*
+apt autoremove
