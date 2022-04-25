@@ -5,6 +5,7 @@ apt -y upgrade
 
 Green='\033[0;32m' 
 Yellow='\033[0;33m'
+RED='\033[0;31m'
 NC='\033[0m'
 
 # cat need escape $
@@ -12,8 +13,15 @@ cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<EOF
 #!/bin/sh
 
 /usr/bin/kernel-install add "\$1" "\$2"
-echo "${Green}Systemd-boot Add Entry Success${NC}"
-exit 0
+
+if [ \$? -eq 0 ]
+then
+  echo "${Green}Systemd-boot Add Entry Success${NC}"
+  exit 0
+else
+  echo "${RED}Systemd-boot Add Entry Failed${NC}"
+  exit 1
+fi
 EOF
 
 chmod 755 /etc/kernel/postinst.d/zz-update-systemd-boot
@@ -22,8 +30,15 @@ cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<EOF
 #!/bin/sh
 
 /usr/bin/kernel-install remove "\$1"
-echo "${Green}Systemd-boot Remove Entry Success${NC}"
-exit 0
+
+if [ \$? -eq 0 ]
+then
+  echo "${Green}Systemd-boot Remove Entry Success${NC}"
+  exit 0
+else
+  echo "${RED}Systemd-boot Remove Entry Failed${NC}"
+  exit 1
+fi
 EOF
 
 chmod 755 /etc/kernel/postrm.d/zz-update-systemd-boot
