@@ -6,9 +6,21 @@ apt -y upgrade
 Green='\033[0;32m' 
 Yellow='\033[0;33m'
 RED='\033[0;31m'
-NC='\033[0m'
+NOCOLOR='\033[0m'
 
-##########################################################################################################################
+###########################################################################################################################
+apt自动删除旧内核的逻辑仅适用于(普遍情况)
+linux-image-5.16.0-6-amd64
+linux-image-5.15.0-6-amd64
+linux-image-5.12.0-6-amd64
+linux-image-amd64 
+这种形式(或者arm64)
+
+不支持多种内核混杂(sort 没法排序了)，比如
+linux-image-5.16.0-6-amd64
+linux-image-5.16.0-6-rt-amd64
+linux-image-5.16.0-6-cloud-amd64
+###########################################################################################################################
 cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<'EOF'
 #!/bin/sh
 
@@ -23,7 +35,7 @@ else
   exit 1
 fi
 
-# We only need 2 kernel: the latest one and the old one
+# We only need 2 kernel: the latest one and the previous one
 NUMBER_OF_EXTRA_KERNEL=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|wc -l)
 
 if [ ${NUMBER_OF_EXTRA_KERNEL} -gt 0 ] 
