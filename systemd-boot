@@ -37,5 +37,5 @@ PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed 's/linux-image-amd64//'|
 apt -y reinstall ${PACKAGE}
 
 
-apt remove grub*
-apt autoremove
+apt -y remove grub*
+apt -y autoremove
