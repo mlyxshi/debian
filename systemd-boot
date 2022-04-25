@@ -32,7 +32,6 @@ mkdir ${ESP_PATH}/${MACHINE_ID}
 
 
 cat > ${ESP_PATH}/loader/loader.conf<<EOF
-default Debian
 timeout 2
 EOF
 
