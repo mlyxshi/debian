@@ -32,7 +32,7 @@ then
     
     for i in $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d')
     do
-        apt purge -y ${i}
+        /usr/bin/apt purge -y ${i}
         if [ $? -eq 0 ]
         then
             echo "\033[0;32mApt Purge Kernel ${i} Success\033[0m"
