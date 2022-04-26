@@ -1,8 +1,13 @@
 #!/bin/bash
 
-apt -y install firmware-linux-nonfree
-apt -y --no-install-recommends install gnome-core 
-apt -y install fonts-wqy-microhei
+apt -y install firmware-linux-nonfree fonts-wqy-microhei
+apt -y --no-install-recommends install gnome-core gnome-console mpv ranger
+# Remove Gnome Build-in App
+# https://packages.debian.org/sid/gnome-core
+# Video Player totem     ->mpv
+# Image Viewer eog       ->ranger
+# File Browser nautilus  ->ranger
+apt purge --auto-remove totem eog nautilus gnome-calculator gnome-contacts gnome-text-editor gnome-software gnome-terminal
 
 # gnome42 add RDP (Need more test)
 # apt -y install gnome-remote-desktop
