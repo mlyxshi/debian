@@ -13,6 +13,8 @@ apt purge --auto-remove totem eog nautilus gnome-calculator gnome-contacts gnome
 # apt -y install gnome-remote-desktop
 # systemctl --user start gnome-remote-desktop
 
+# replace gnome-console with warp, when warp(linux) releases 
+
 #vscode
 if [ $(uname -m) = "x86_64" ]
 then
