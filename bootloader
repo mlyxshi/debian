@@ -27,7 +27,7 @@ NOCOLOR='\033[0m'
 #linux-image-5.16.0-6-cloud-amd64
 ###########################################################################################################################
 cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<'EOF'
-#!/bin/sh
+#!/bin/bash
 
 /usr/bin/kernel-install add "$1" "$2"
 
@@ -59,7 +59,7 @@ EOF
 chmod 755 /etc/kernel/postinst.d/zz-update-systemd-boot
 ##########################################################################################################################
 cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<'EOF'
-#!/bin/sh
+#!/bin/bash
 
 /usr/bin/kernel-install remove "$1"
 
