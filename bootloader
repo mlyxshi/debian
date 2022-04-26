@@ -4,14 +4,14 @@
 # ls -l /bin/sh
 # lrwxrwxrwx 1 root root 4 Mar 14 07:11 /bin/sh -> dash
 # dash do not support echo -e "output" 
+GREEN='\033[0;32m' 
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NOCOLOR='\033[0m'
 
 apt update
 apt -y upgrade 
 
-Green='\033[0;32m' 
-Yellow='\033[0;33m'
-RED='\033[0;31m'
-NOCOLOR='\033[0m'
 
 ###########################################################################################################################
 #apt正确自动提示删除旧内核的逻辑仅适用于(普遍情况)
@@ -29,30 +29,35 @@ NOCOLOR='\033[0m'
 cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<'EOF'
 #!/bin/bash
 
+GREEN='\033[0;32m' 
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+NOCOLOR='\033[0m'
+
 /usr/bin/kernel-install add "$1" "$2"
 
 if [ $? -eq 0 ]
 then
-  echo -e "\033[0;32mSystemd-boot Add Entry Success: $1\033[0m"
+  echo -e "${GREEN}Systemd-boot Add Entry Success: $1${NOCOLOR}"
 else
-  echo -e "\033[0;31mSystemd-boot Add Entry Failed: $1\033[0m"
+  echo -e "${RED}Systemd-boot Add Entry Failed: $1${NOCOLOR}"
   exit 1
 fi
 
 NUMBER_OF_KERNEL=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|wc -l)
 
-echo -e "\033[0;32mNumber of Kernel: ${NUMBER_OF_KERNEL}\033[0m"
+echo -e "${GREEN}Number of Kernel: ${NUMBER_OF_KERNEL}${NOCOLOR}"
 
 for i in $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r)
 do
-    echo -e "\033[0;32mInstalled Kernel: $i\033[0m"
+    echo -e "${GREEN}Installed Kernel: $i${NOCOLOR}"
 done
 
 if [ ${NUMBER_OF_KERNEL} -gt 2 ] 
 then
    echo " "
-   echo -e "\033[0;33mSuggestion: Only Keep The Latest Two Kernels\033[0m"
-   echo -e "\033[0;33mapt -y purge $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|tr '\n' ' ')\033[0m"
+   echo -e "${YELLOW}Suggestion: Only Keep The Latest Two Kernels${NOCOLOR}"
+   echo -e "${YELLOW}apt -y purge $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|tr '\n' ' ')${NOCOLOR}"
 fi
 EOF
 ##########################################################################################################################
@@ -61,14 +66,18 @@ chmod 755 /etc/kernel/postinst.d/zz-update-systemd-boot
 cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<'EOF'
 #!/bin/bash
 
+GREEN='\033[0;32m' 
+RED='\033[0;31m'
+NOCOLOR='\033[0m'
+
 /usr/bin/kernel-install remove "$1"
 
 if [ $? -eq 0 ]
 then
-  echo -e "\033[0;32mSystemd-boot Remove Entry Success: $1\033[0m"
+  echo -e "${GREEN}Systemd-boot Remove Entry Success: $1${NOCOLOR}"
   exit 0
 else
-  echo -e "\033[0;31mSystemd-boot Remove Entry Failed: $1\033[0m"
+  echo -e "${RED}Systemd-boot Remove Entry Failed: $1${NOCOLOR}"
   exit 1
 fi
 EOF
@@ -88,17 +97,27 @@ EOF
 ##########################################################################################################################
 
 # get latest installed kernel package name 
-KERNEL_PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|head -1)
+LATEST_KERNEL_PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|head -1)
 
 # manually trigger postinst.d script to run kernel-install
-# kernel-install move /boot/vmlinuz /boot/initrd to ESP:/MACHINEID.
-# and add entry in ESP:/loader/entries
-apt -y reinstall ${KERNEL_PACKAGE}
+
+# kernel-install add <KERNEL_VERSION> <ABSOLUTE_PATH_TO_KERNEL>
+# copy /boot/vmlinuz /boot/initrd to ESP:/MACHINEID.
+# Add Entry in /boot/loader/entries/<KERNEL_VERSION>.conf
+
+# kernel-install remove <KERNEL_VERSION>
+# remove /boot/vmlinuz /boot/initrd from ESP:/MACHINEID.
+# Remove Entry in /boot/loader/entries/<KERNEL_VERSION>.conf 
+
+apt -y reinstall ${LATEST_KERNEL_PACKAGE}
 
 apt -y purge grub*
 apt -y install efibootmgr
 apt -y autoremove
+
+echo "########################################################"
 efibootmgr
-##########################################################################################################################
-echo -e "\033[0;33mPlease Manually Configure Boot Order\033[0m"
-echo -e "\033[0;33mefibootmgr -b <X> -B\033[0m"
+echo "########################################################"
+echo -e "${YELLOW}Please Manually Configure Boot Order${NOCOLOR}"
+echo -e "${YELLOW}efibootmgr -b <X> -B${NOCOLOR}"
+echo "########################################################"
