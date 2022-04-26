@@ -112,12 +112,13 @@ LATEST_KERNEL_PACKAGE=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-im
 apt -y reinstall ${LATEST_KERNEL_PACKAGE}
 
 apt -y purge grub*
+rm -rf /boot/grub
 apt -y install efibootmgr
 apt -y autoremove
 
 echo "########################################################"
 efibootmgr
 echo "########################################################"
-echo -e "${YELLOW}Please Manually Configure Boot Order${NOCOLOR}"
+echo -e "${YELLOW}Please Manually Delete Grub Entry and Configure Boot Order${NOCOLOR}"
 echo -e "${YELLOW}efibootmgr -b <X> -B${NOCOLOR}"
 echo "########################################################"
