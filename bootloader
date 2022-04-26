@@ -1,4 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+
+# Debian
+# ls -l /bin/sh
+# lrwxrwxrwx 1 root root 4 Mar 14 07:11 /bin/sh -> dash
+# dash do not support echo -e "output" 
 
 apt update
 apt -y upgrade 
@@ -28,26 +33,26 @@ cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<'EOF'
 
 if [ $? -eq 0 ]
 then
-  echo "\033[0;32mSystemd-boot Add Entry Success\033[0m"
+  echo -e "\033[0;32mSystemd-boot Add Entry Success\033[0m"
 else
-  echo "\033[0;31mSystemd-boot Add Entry Failed\033[0m"
+  echo -e "\033[0;31mSystemd-boot Add Entry Failed\033[0m"
   exit 1
 fi
 
 NUMBER_OF_KERNEL=$(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|wc -l)
 
-echo "\033[0;32mNumber of Kernel: ${NUMBER_OF_KERNEL}\033[0m"
+echo -e "\033[0;32mNumber of Kernel: ${NUMBER_OF_KERNEL}\033[0m"
 
 for i in $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r)
 do
-    echo "\033[0;32mInstalled Kernel: $i\033[0m"
+    echo -e "\033[0;32mInstalled Kernel: $i\033[0m"
 done
 
 if [ ${NUMBER_OF_KERNEL} -gt 2 ] 
 then
    echo " "
-   echo "\033[0;33mSuggestion: Only Keep The Latest Two Kernels\033[0m"
-   echo "\033[0;33mapt -y purge $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|tr '\n' ' ')\033[0m"
+   echo -e "\033[0;33mSuggestion: Only Keep The Latest Two Kernels\033[0m"
+   echo -e "\033[0;33mapt -y purge $(dpkg -l|awk '{print $2}'|grep linux-image|sed '/linux-image-amd64/d'|sed '/linux-image-arm64/d'|sort -r|sed '1,2d'|tr '\n' ' ')\033[0m"
 fi
 EOF
 ##########################################################################################################################
@@ -60,10 +65,10 @@ cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<'EOF'
 
 if [ $? -eq 0 ]
 then
-  echo "\033[0;32mSystemd-boot Remove Entry Success\033[0m"
+  echo -e "\033[0;32mSystemd-boot Remove Entry Success\033[0m"
   exit 0
 else
-  echo "\033[0;31mSystemd-boot Remove Entry Failed\033[0m"
+  echo -e "\033[0;31mSystemd-boot Remove Entry Failed\033[0m"
   exit 1
 fi
 EOF
@@ -95,5 +100,5 @@ apt -y install efibootmgr
 apt -y autoremove
 efibootmgr
 ##########################################################################################################################
-echo "\033[0;33mPlease Manually Configure Boot Order\033[0m"
-echo "\033[0;33mefibootmgr -b <X> -B\033[0m"
+echo -e "\033[0;33mPlease Manually Configure Boot Order\033[0m"
+echo -e "\033[0;33mefibootmgr -b <X> -B\033[0m"
