@@ -33,9 +33,9 @@ cat > /etc/kernel/postinst.d/zz-update-systemd-boot <<'EOF'
 
 if [ $? -eq 0 ]
 then
-  echo -e "\033[0;32mSystemd-boot Add Entry Success\033[0m"
+  echo -e "\033[0;32mSystemd-boot Add Entry Success: $1\033[0m"
 else
-  echo -e "\033[0;31mSystemd-boot Add Entry Failed\033[0m"
+  echo -e "\033[0;31mSystemd-boot Add Entry Failed: $1\033[0m"
   exit 1
 fi
 
@@ -65,10 +65,10 @@ cat > /etc/kernel/postrm.d/zz-update-systemd-boot <<'EOF'
 
 if [ $? -eq 0 ]
 then
-  echo -e "\033[0;32mSystemd-boot Remove Entry Success\033[0m"
+  echo -e "\033[0;32mSystemd-boot Remove Entry Success: $1\033[0m"
   exit 0
 else
-  echo -e "\033[0;31mSystemd-boot Remove Entry Failed\033[0m"
+  echo -e "\033[0;31mSystemd-boot Remove Entry Failed: $1\033[0m"
   exit 1
 fi
 EOF
