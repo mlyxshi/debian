@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Pre 
 # bash <(wget -qO- https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh) --user root  --authorized-keys-url https://github.com/mlyxshi.keys --version stable --filesystem ext4 &&reboot
