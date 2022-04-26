@@ -1,7 +1,8 @@
 #!/bin/bash
 
 apt -y install firmware-linux-nonfree
-apt -y --no-install-recommends install gnome-core
+apt -y --no-install-recommends install gnome-core 
+apt -y install fonts-wqy-microhei
 
 # gnome42 add RDP (Need more test)
 # apt -y install gnome-remote-desktop
