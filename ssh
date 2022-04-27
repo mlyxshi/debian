@@ -1,5 +1,5 @@
 #!/bin/sh
 sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
-systemctl restart sshd
 mkdir -p /root/.ssh
 wget -O- https://github.com/mlyxshi.keys  > /root/.ssh/authorized_keys
+systemctl restart sshd
