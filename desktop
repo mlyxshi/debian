@@ -16,15 +16,8 @@ apt purge --auto-remove totem eog nautilus gnome-calculator gnome-contacts gnome
 # replace gnome-console with warp, when warp(linux) releases 
 
 #vscode
-if [ $(uname -m) = "x86_64" ]
-then
-  echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list
-elif [ $(uname -m) = "aarch64" ]
-then
-  echo "deb [arch=arm64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list
-else
-  exit 1
-fi
+[ $(uname -m) = "x86_64" ] && echo "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list
+[ $(uname -m) = "aarch64" ] && echo "deb [arch=arm64 signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list
 
 apt -y install wget gpg
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
