@@ -4,9 +4,9 @@ apt -y install firmware-linux-nonfree fonts-wqy-microhei
 apt -y --no-install-recommends install gnome-core gnome-console mpv ranger
 # Remove Gnome Build-in App
 # https://packages.debian.org/sid/gnome-core
-# Video Player totem     ->mpv
-# Image Viewer eog       ->ranger
-# File Browser nautilus  ->ranger
+# Video Player |totem     |mpv
+# Image Viewer |eog       |ranger
+# File Browser |nautilus  |ranger
 apt purge --auto-remove totem eog nautilus gnome-calculator gnome-contacts gnome-text-editor gnome-software gnome-terminal
 
 # gnome42 add RDP (Need more test)
