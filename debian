@@ -3,13 +3,21 @@
 # Pre 
 # bash <(wget -qO- https://raw.githubusercontent.com/bohanyang/debi/master/debi.sh) --user root  --authorized-keys-url https://github.com/mlyxshi.keys --version stable --filesystem ext4 &&reboot
 
+if [ -z $1 ] 
+then
 # Convert Debian Stable to Testing
-
 cat > /etc/apt/sources.list <<EOF
 deb http://deb.debian.org/debian testing main contrib non-free
 deb http://security.debian.org/debian-security testing-security main contrib non-free
 deb http://deb.debian.org/debian testing-updates main contrib non-free
 EOF
+elif [ $1 = "sid" ]
+then
+# Convert Debian Stable to Unstable
+cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian/ sid main contrib non-free
+EOF
+fi
 
 apt update
 apt -y install wget curl git vim
