@@ -20,11 +20,19 @@ EOF
 fi
 
 apt update
-apt -y install wget curl git vim
+apt -y install wget curl git vim unzip
 apt -y upgrade 
 apt -y dist-upgrade
 apt -y autoremove
 apt -y clean
+
+# nerd font(Hack)
+cd ~
+wget https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip
+unzip Hack-v3.003-ttf.zip -d /usr/local/share/fonts/
+fc-cache -fv
+
+
 
 # systemd-networkd
 DEVICENAME="$(ip -o -4 route show to default | awk '{print $5}'|head -1)"
