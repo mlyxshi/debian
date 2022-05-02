@@ -1,7 +1,7 @@
-bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/shell/main/ssh)
+bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/debian/main/ssh)
 
-bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/shell/main/debian)
+bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/debian/main/debian)
 
-bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/shell/main/bootloader)
+bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/debian/main/bootloader)
 
-bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/shell/main/desktop)
+bash <(wget -qO- https://raw.githubusercontent.com/mlyxshi/debian/main/desktop)
