@@ -20,7 +20,7 @@ EOF
 fi
 
 apt update
-apt -y install wget curl git vim unzip
+apt -y install wget curl git vim neovim unzip
 apt -y upgrade 
 apt -y dist-upgrade
 apt -y autoremove
