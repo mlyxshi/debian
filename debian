@@ -5,22 +5,22 @@
 
 if [ -z $1 ] 
 then
+# Convert Debian Stable to Unstable[Default]
+cat > /etc/apt/sources.list <<EOF
+deb http://deb.debian.org/debian/ sid main contrib non-free
+EOF
+elif [ $1 = "test" ]
+then
 # Convert Debian Stable to Testing
 cat > /etc/apt/sources.list <<EOF
 deb http://deb.debian.org/debian testing main contrib non-free
 deb http://security.debian.org/debian-security testing-security main contrib non-free
 deb http://deb.debian.org/debian testing-updates main contrib non-free
 EOF
-elif [ $1 = "sid" ]
-then
-# Convert Debian Stable to Unstable
-cat > /etc/apt/sources.list <<EOF
-deb http://deb.debian.org/debian/ sid main contrib non-free
-EOF
 fi
 
 apt update
-apt -y install wget curl git vim neovim unzip
+apt -y install wget curl git vim unzip
 apt -y upgrade 
 apt -y dist-upgrade
 apt -y autoremove
